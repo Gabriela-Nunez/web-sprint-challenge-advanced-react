@@ -111,14 +111,24 @@ export default function AppFunctional(props) {
           ...state,
           message: res.data.message,
           formValues: '',
-          x: 2,
-          y: 2,
-          steps: 0
+          // x: 2,
+          // y: 2,
+          // steps: 0
         })
       })
       .catch(err => {
         setState({...state, message: err.response.data.message})
       })
+      
+        setState({
+          x: initialX,
+          y: initialY,
+          steps: initialSteps,
+          message: initialMessage,
+          xy: initialIndex,
+          formValues: initialEmail
+         })  
+      
   }
 
   useEffect(()=>{console.log(state)},[state])
