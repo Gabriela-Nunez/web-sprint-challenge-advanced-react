@@ -9,6 +9,7 @@ const initialIndex = 4 // the index the "B" is at
 const initialX = 2
 const initialY = 2
 
+
 const initialState = {
   message: initialMessage,
   email: initialEmail,
@@ -25,7 +26,8 @@ export default class AppClass extends React.Component {
       steps: initialSteps,
       xy: initialIndex,
       message: initialMessage,
-      formValues: ''
+      formValues: '',
+      
     }
     
   }
@@ -112,7 +114,10 @@ export default class AppClass extends React.Component {
           formValues: ''
         })
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        // console.log(err.response.data);
+        this.setState({ ...this.state, message: err.response.data.message })
+      })
   }
 
   render() {
@@ -126,8 +131,8 @@ export default class AppClass extends React.Component {
         <div id="grid">
           {
             [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
-              <div key={idx} className={`square${idx === 4 ? ' active' : ''}`}>
-                {idx === 4 ? 'B' : null}
+              <div key={idx} className={`square${idx === this.state.xy ? ' active' : ''}`}>
+                {idx === this.state.xy ? 'B' : null}
               </div>
             ))
             

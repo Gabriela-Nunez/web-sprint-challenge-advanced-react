@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import axios from 'axios';
 
 // Suggested initial states
 
@@ -20,7 +21,7 @@ export default function AppFunctional(props) {
       steps: initialSteps,
       xy: initialIndex,
       message: initialMessage,
-      formValues: ''
+      formValues: initialEmail
   })
 
 
@@ -32,7 +33,7 @@ export default function AppFunctional(props) {
  
 
 
-  const reset = () => {
+ function reset() {
     // Use this helper to reset all states to their initial values.
    setState({
     x: initialX,
@@ -40,7 +41,7 @@ export default function AppFunctional(props) {
     steps: initialSteps,
     message: initialMessage,
     xy: initialIndex,
-    formValues: ''
+    formValues: initialEmail
    })  
   }
 
@@ -48,31 +49,32 @@ export default function AppFunctional(props) {
     // This helper takes a direction ("left", "up", etc) and calculates what the next index
     // of the "B" would be. If the move is impossible because we are at the edge of the grid,
     // this helper should return the current index unchanged.
+    
+
     if(direction === 'left'){
       if(state.x - 1 === 0){
-        return ({"x": state.x, "y": state.y})
+        return ({"x": state.x, "y":state.y})
       }
-      return ({"x": state.x - 1, "y": state.y,"xy": state.xy -1,"steps": state.steps + 1})
+      return ({"x": state.x - 1, "y":state.y,"xy":state.xy -1,"steps": state.steps + 1})
     }
     if(direction === 'right'){
       if(state.x + 1 === 4){
-        return ({"x": state.x, "y": state.y})
+        return ({"x": state.x, "y":state.y})
       }
-      return ({"x": state.x + 1, "y": state.y,"xy": state.xy + 1,"steps": state.steps + 1})
+      return ({"x": state.x + 1, "y":state.y,"xy":state.xy + 1,"steps": state.steps + 1})
     }
     if(direction === 'up'){
       if(state.y - 1 === 0){
-        return ({"x": state.x, "y": state.y})
+        return ({"x": state.x, "y":state.y})
       }
-      return ({"x": state.x, "y": state.y - 1,"xy": state.xy - 3,"steps": state.steps + 1})
+      return ({"x": state.x, "y":state.y - 1,"xy":state.xy - 3,"steps": state.steps + 1})
     }
     if(direction === 'down'){
       if(state.y + 1 === 4){
-        return ({"x": state.x, "y": state.y})
+        return ({"x": state.x, "y":state.y})
       }
-      return ({"x": state.x, "y": state.y + 1,"xy": state.xy + 3,"steps": state.steps + 1})
+      return ({"x": state.x, "y":state.y + 1,"xy":state.xy + 3,"steps": state.steps + 1})
     }
-
   }
 
   
@@ -103,15 +105,20 @@ export default function AppFunctional(props) {
   function onSubmit(evt) {
     // Use a POST request to send a payload to the server.
     evt.preventDefault()
-    axios.post('http://localhost:9000/api/result', {email: state.formValues, steps: state.steps, x: state.x, y: this.state.y})
+    axios.post('http://localhost:9000/api/result', {email: state.formValues, steps: state.steps, x: state.x, y: state.y})
       .then(res => {
         setState({
           ...state,
           message: res.data.message,
-          formValues: ''
+          formValues: '',
+          x: 2,
+          y: 2,
+          steps: 0
         })
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        setState({...state, message: err.response.data.message})
+      })
   }
 
   return (
@@ -123,8 +130,8 @@ export default function AppFunctional(props) {
       <div id="grid">
         {
           [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
-            <div key={idx} className={`square${idx === 4 ? ' active' : ''}`}>
-              {idx === 4 ? 'B' : null}
+            <div key={idx} className={`square${idx === state.xy ? ' active' : ''}`}>
+              {idx === state.xy ? 'B' : null}
             </div>
           ))
         }
