@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import '@testing-library/jest-dom/';
 
 
 const initialMessage = ''
