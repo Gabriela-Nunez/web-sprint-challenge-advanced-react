@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 // Suggested initial states
@@ -83,7 +83,7 @@ export default function AppFunctional(props) {
     // and change any states accordingly.
     let nextMove = getNextIndex(evt.target.id)
     if (`(${nextMove.x},${nextMove.y})` === getXY()){
-      return setState({message: `You can't go ${evt.target.id}`})
+      return setState({ ...state, message: `You can't go ${evt.target.id}`})
     }
     setState({ ...state,
       message: initialMessage,
@@ -120,6 +120,9 @@ export default function AppFunctional(props) {
         setState({...state, message: err.response.data.message})
       })
   }
+
+  useEffect(()=>{console.log(state)},[state])
+
 
   return (
     <div id="wrapper" className={props.className}>

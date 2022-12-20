@@ -1,6 +1,7 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import AppClass from "./AppClass"
+import '@testing-library/jest-dom/extend-expect'
 
 // Write your tests here
 test('sanity', () => {
@@ -11,18 +12,18 @@ test('renders without errors', () => {
   render(<AppClass />);
 })
 
-test('that a form exist', () => {
+test('that a form exist', async() => {
   render(<AppClass />);
 
- const form = screen.findByPlaceholderText(/type email/i);
+ const form = await screen.findByPlaceholderText(/type email/i);
 
  expect(form).toBeInTheDocument();
 })
 
-test('to have email input', () => {
+test('to have email input', async() => {
   render (<AppClass />);
 
-  const emailInput = screen.findByPlaceholderText(/type email/i);
+  const emailInput = await screen.findByPlaceholderText(/type email/i);
 
   expect(emailInput).toBeInTheDocument();
 })
