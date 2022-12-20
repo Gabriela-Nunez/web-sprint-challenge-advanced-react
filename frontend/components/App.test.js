@@ -26,3 +26,4 @@ test('to have email input', () => {
 
   expect(emailInput).toBeInTheDocument();
 })
+
